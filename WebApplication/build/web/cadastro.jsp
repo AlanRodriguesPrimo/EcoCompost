@@ -87,10 +87,7 @@
                                 <input class="form-control" type="number" name="txtCpf" id="CPF"
                                     placeholder="000.000.000-00">
                             </div>
-                            <!-- <div class="form-group form-group-razaoSocial d-none">
-                                <label for="RazaoSocial">Razao Social</label>
-                                <input class="form-control" type="text" name="txtRazaoS" id="razaoSocial">
-                            </div> -->
+                      
 
                             <div class="form-group form-group-cnpj d-none">
                                 <label for="CNPJ">CNPJ:</label>

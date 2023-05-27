@@ -68,21 +68,21 @@ public class RegisterServlet extends HttpServlet {
             
             con = ConnectionFactorySQL.getConnection();          
             if(alter.equals("pf")){
-                String sqlConsult = "Select COUNT(*) from pf where nome_pf = ? and cpf_pf = ? and email_pf = ? and password_pf = ?;";      
+                
+                String sqlConsult = "Select COUNT(*) from pf where cpf_pf = ? or email_pf = ?;";      
                 stmt_pf2 = con.prepareStatement(sqlConsult);
-                stmt_pf2.setString(1,name);
-                stmt_pf2.setString(2,CPF);
-                stmt_pf2.setString(3,email);
-                stmt_pf2.setString(4, hash);
+                stmt_pf2.setString(1,CPF);
+                stmt_pf2.setString(2,email);
+                
                 int count;
-                try (ResultSet rs = stmt_pf2.executeQuery()) {
-                    rs.next();
-                    count = rs.getInt(1);
-                }
+                ResultSet rs = stmt_pf2.executeQuery();
+                rs.next();
+                count = rs.getInt(1);
+               
                 stmt_pf2.close();
-
+                
                 if(count > 0){
-                    JOptionPane.showMessageDialog(null, "Dados existentes!");
+                    JOptionPane.showMessageDialog(null, "Dados existentes. CPF ou E-mail já cadastrado.");
                     response.sendRedirect("cadastro.jsp");
                 }else{
                     calcb = 1;
@@ -102,12 +102,11 @@ public class RegisterServlet extends HttpServlet {
                 }
             }else{
                 if(alter.equals("pj") ){
-                    String sqlConsult2 = "Select COUNT(*) from pj where RazaoSocial_PJ = ? and CNPJ = ? and Email_PJ = ? and Password_PJ = ?;";      
+                    String sqlConsult2 = "Select COUNT(*) from pj where CNPJ = ? or Email_PJ = ?;";      
                     stmt_pj2 = con.prepareStatement(sqlConsult2);
-                    stmt_pj2.setString(1,rsocial);
-                    stmt_pj2.setString(2,CNPJ);
-                    stmt_pj2.setString(3,email);
-                    stmt_pj2.setString(4, hash);
+                    stmt_pj2.setString(1,CNPJ);
+                    stmt_pj2.setString(2,email);
+                    
                     ResultSet rs1 = stmt_pj2.executeQuery();
                     rs1.next();
                     int count = rs1.getInt(1);
@@ -115,13 +114,13 @@ public class RegisterServlet extends HttpServlet {
                     stmt_pj2.close();
 
                     if(count > 0){
-                        JOptionPane.showMessageDialog(null, "Dados existentes!");
+                        JOptionPane.showMessageDialog(null, "Dados existentes. CNPJ ou E-mail já cadastrado.");
                         response.sendRedirect("cadastro.jsp");
                     }else{
                         calcb = 1;
                         String sqlInsert2 = "INSERT INTO pj (RazaoSocial_PJ, CNPJ, Email_PJ, Password_PJ, data_regis_PJ,rs_em_conta_pj,rua_pj,num_end_pj,bairro_pj) VALUES (?, ?, ?, ?, ?,0,?,?,?);";
                         stmt_pj = con.prepareStatement(sqlInsert2);
-                        stmt_pj.setString(1,rsocial);
+                        stmt_pj.setString(1,name);
                         stmt_pj.setString(2,CNPJ);
                         stmt_pj.setString(3,email);
                         stmt_pj.setString(4, hash);
